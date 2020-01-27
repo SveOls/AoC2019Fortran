@@ -1,4 +1,4 @@
-    module day1
+module day1
     implicit none 
 
     contains
@@ -51,7 +51,7 @@
                 do
                     fuel = sum_a(fuel)
                     if ( fuel < 1 ) then
-                    exit
+                        exit
                     end if
                     sum = sum + fuel
                 end do
