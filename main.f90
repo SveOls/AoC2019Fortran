@@ -1,5 +1,6 @@
 program advent_of_code_2019
     use day1
+    use day3
     implicit none
     integer :: sel, i, times
     real :: starts, stops
@@ -27,11 +28,11 @@ program advent_of_code_2019
             case default
             print*, "default"
             case (1)
-            print*, day1all()
+                print*, day1all()
             case (2)
                 print*, "2"
             case (3)
-                print*, "3"
+                print*, day3all()
             case (4)
                 print*, "4"
             case (5)
