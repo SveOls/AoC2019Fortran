@@ -12,10 +12,10 @@ program advent_of_code_2019
 
     call cpu_time(starts)
     select case (times)
-    case (:1)
-        call do_once(sel)
-    case default
-        call do_it(times, sel)
+        case (:1)
+            call do_once(sel)
+        case default
+            call do_it(times, sel)
     end select
 
     call cpu_time(stops)
@@ -50,7 +50,7 @@ program advent_of_code_2019
                 case (2)
                     print*, "2"
                 case (3)
-                    print*, "3"
+                    call day3timer()
                 case (4)
                     print*, "4"
                 case (5)
