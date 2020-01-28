@@ -38,40 +38,69 @@ module day4
         function filter(a, b)
             implicit none
             
-            integer, dimension(6)    :: start
+            integer, dimension(6)    :: start, temp
             integer, dimension(5000) :: filter
-            integer                  :: a, b, coun = 0, q, w, e, r, t, y
+            integer                  :: a, b, coun = 0, num, q, w, e, r, t, y, verytempvalue = 0
             
-            start(1) = a / 100000
-            start(2) = a / 10000 - 10 * start(1)
-            start(3) = a / 1000 - 10 * (start(2) + 10 * start(1))
-            start(4) = a / 100 - 10 * (start(3) + 10 * (start(2) + 10 * start(1)))
-            start(5) = a / 10 - 10 * (start(4) + 10 * (start(3) + 10 * (start(2) + 10 * start(1))))
-            start(6) = a - 10 * (start(5) + 10 * (start(4) + 10 * (start(3) + 10 * (start(2) + 10 * start(1)))))
+            num = a
+            
+            start(1) = (a - mod(a, 100000)) / 100000
+            start(2) = (a - mod(a, 10000)  - 100000 * start(1)) / 10000
+            start(3) = (a - mod(a, 1000)   - 100000 * start(1) - 10000 * start(2)) / 1000
+            start(4) = (a - mod(a, 100)    - 100000 * start(1) - 10000 * start(2) - 1000 * start(3)) / 100
+            start(5) = (a - mod(a, 10)     - 100000 * start(1) - 10000 * start(2) - 1000 * start(3) - 100 * start(4)) / 10
+            start(6) = a                   - 100000 * start(1) - 10000 * start(2) - 1000 * start(3) - 100 * start(4) - 10 * start(5)
 
-            print*, start
-
-            do q = start(1), 9
+            outer: do q = start(1), 9
                 do w = start(2), 9
                     do e = start(3), 9
                         do r = start(4), 9
                             do t = start(5), 9
                                 do y = start(6), 9
+                                    temp = (/ q,w,e,r,t,y /)
+                                    if (check_number(temp)) then
+                                        verytempvalue = verytempvalue + 1
+                                        coun = coun + 1
+                                        filter(coun) = 100000 * q + 10000 * w + 1000 * e + 100 * r + 10 * t + y
+                                    end if
+                                    
+                                    if (num == b) exit outer
+                                    num = num + 1
                                 end do
-                                start(6) = 1
+                                start(6) = 0
                             end do
-                            start(5) = 1
+                            start(5) = 0
                         end do
-                        start(4) = 1
+                        start(4) = 0
                     end do
-                    start(3) = 1
+                    start(3) = 0
                 end do
-                start(2) = 1
-                1111 exit
-            end do
+                start(2) = 0
+            end do outer
 
             filter(1) = a
             filter(2) = b
 
         end function filter
+
+        function check_number(inp)
+            implicit none
+
+            integer, dimension(6) :: inp
+            logical :: check_number, rising = .true., equals = .false.
+            integer :: prev, i
+
+            rising = .true.
+            equals = .false.
+
+            prev = inp(1)
+            do i = 2, 6
+                ! print*, prev, inp(i), rising, equals
+                if (inp(i) < prev)  rising = .false.
+                if (inp(i) == prev) equals = .true.
+                prev = inp(i)
+            end do
+
+            check_number = rising .and. equals
+        end function check_number
 end module day4
