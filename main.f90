@@ -1,6 +1,7 @@
 program advent_of_code_2019
     use day1
     use day3
+    use day4
     implicit none
     integer :: sel, i, times
     real :: starts, stops
@@ -34,7 +35,7 @@ program advent_of_code_2019
             case (3)
                 print*, day3all()
             case (4)
-                print*, "4"
+                print*, day4all()
             case (5)
                 print*, "5"
             end select
@@ -52,7 +53,7 @@ program advent_of_code_2019
                 case (3)
                     call day3timer()
                 case (4)
-                    print*, "4"
+                    call day4timer()
                 case (5)
                     print*, "5"
             end select
