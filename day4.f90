@@ -12,35 +12,69 @@ module day4
         function day4all()
             implicit none
             
-            integer, dimension(2)    :: day4all
-            integer, dimension(5000) :: dats
-            integer                  :: a = 123257, b = 647015
-            dats = filter(a, b)
+            integer, dimension(2)              :: day4all
+            integer, dimension(:), allocatable :: info
+            integer                            :: a = 123257, b = 647015
+            info = filter(a, b)
 
-            day4all(1) = day4a()
-            day4all(2) = day4b()
+            day4all(1) = day4a(info)
+            day4all(2) = day4b(info)
         end function day4all
 
-        function day4a()
+        function day4a(filter)
             implicit none
             
-            integer :: day4a
-            day4a = 2
+            integer :: day4a, filter(:)
+
+            day4a = size(filter, 1)
         end function day4a
 
-        function day4b()
+        function day4b(filter)
             implicit none
 
-            integer :: day4b
-            day4b = 2
+            integer :: day4b, filter(:), start(6), a, i, j, prevm
+            logical :: check
+
+            day4b = 0
+            do i = 1, size(filter)
+                check = .false.
+                a = filter(i)
+                start(1) = (a - mod(a, 100000)) / 100000
+                start(2) = (a - mod(a, 10000)  - 100000 * start(1)) / 10000
+                start(3) = (a - mod(a, 1000)   - 100000 * start(1) - 10000 * start(2)) / 1000
+                start(4) = (a - mod(a, 100)    - 100000 * start(1) - 10000 * start(2) - 1000 * start(3)) / 100
+                start(5) = (a - mod(a, 10)     - 100000 * start(1) - 10000 * start(2) - 1000 * start(3) - 100 * start(4)) / 10
+                start(6) = a           - 100000 * start(1) - 10000 * start(2) - 1000 * start(3) - 100 * start(4) - 10 * start(5)
+
+                prevm = 0
+                do j = 2, 6
+                    if (start(j - 1) == start(j)) then
+                        if (start(prevm) == start(j - 1)) then
+                            check = .false.
+                        else
+                            check = .true.
+                        end if
+                    else if (check) then
+                        exit
+                    end if
+                    prevm = j - 1
+                end do
+
+                if (check) day4b = day4b + 1
+
+            end do
+            print*, size(filter)
+
         end function day4b
 
         function filter(a, b)
             implicit none
             
-            integer, dimension(6)    :: start, temp
-            integer, dimension(5000) :: filter
-            integer                  :: a, b, coun = 0, num, q, w, e, r, t, y, verytempvalue = 0
+            integer, dimension(6)              :: start, temp
+            integer, dimension(5000)           :: tempdata
+            integer, dimension(:), allocatable :: filter
+
+            integer :: a, b, coun = 0, num, q, w, e, r, t, y
             
             num = a
             
@@ -59,11 +93,11 @@ module day4
                                 do y = start(6), 9
                                     temp = (/ q,w,e,r,t,y /)
                                     if (check_number(temp)) then
-                                        verytempvalue = verytempvalue + 1
                                         coun = coun + 1
-                                        filter(coun) = 100000 * q + 10000 * w + 1000 * e + 100 * r + 10 * t + y
+                                        tempdata(coun) = 100000 * q + 10000 * w + 1000 * e + 100 * r + 10 * t + y
+                                        ! print*, tempdata(coun)
                                     end if
-                                    
+
                                     if (num == b) exit outer
                                     num = num + 1
                                 end do
@@ -78,8 +112,10 @@ module day4
                 start(2) = 0
             end do outer
 
-            filter(1) = a
-            filter(2) = b
+            allocate(filter(coun))
+            do q = 1, coun
+                filter(q) = tempdata(q)
+            end do
 
         end function filter
 
