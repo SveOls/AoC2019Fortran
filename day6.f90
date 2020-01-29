@@ -17,17 +17,59 @@ module day6
             character(3), allocatable :: orbits(:,:)
 
             call readf(orbits)
-            day6all(1) = day6a()
+
+            day6all(1) = day6a(orbits)
             day6all(2) = day6b()
+
         end function day6all
 
-        function day6a()
+        function day6a(orbits)
             implicit none
 
-            integer :: day6a
+            ! type point_orbit
+            !     integer, pointer :: val => null()
+            !     type(point_orbit), pointer :: pee => null()
+            ! end type
 
-            day6a = 1
+
+            character(3)         :: orbits(:,:)
+            integer              :: day6a, i, j
+            integer, allocatable :: list(:,:)
+
+            allocate(list(size(orbits, 1), 2))
+
+            do i = 1, size(orbits, 1)
+                list(i, :) = (/ -1, 1 /)
+                do j = 1, size(orbits, 1)
+                    if (orbits(i, 1) == orbits(j, 2)) then
+                        list(i, :) = (/ j, 0 /)
+                        exit
+                    end if
+                end do
+            end do
+
+            do i = 1, size(list, 1)
+                day6a = day6a + get_out(i, list)
+            end do
+
+
+
         end function day6a
+
+        recursive function get_out(i, list) result(ret)
+            implicit none 
+    
+            integer :: i, ret
+
+            integer, intent(inout) :: list(:,:)
+
+            if (list(i, 2) == 0) then
+                list(i, 2) = get_out(list(i, 1), list) + 1
+            end if
+
+            ret = list(i, 2)
+
+        end function
 
         function day6b()
             implicit none
@@ -42,22 +84,31 @@ module day6
 
             character(3), allocatable, intent(out) :: orbits(:,:)
 
-            integer      :: leng
+            integer      :: leng, i
             character(3) :: parent, child
 
             leng = 0
-            open (unit = 3, file = "input//day6.txt")
+
+            open (unit = 2019, file = "input//day6.txt")
+
             do
-                read(3,*, end = 6010)
+    6011        continue
+                read(2019,*, end = 6010)
                 leng = leng + 1
-                continue
-       6010     exit
+                goto 6011
+    6010        exit
             end do
 
-            ! read(3,'(A)') parent, child
-            close (3)
-            print*, "size:", leng
+            allocate(orbits(leng, 2))
+            rewind(2019)
 
+            do i = 1, leng
+                read(2019,*) parent, child
+                orbits(i, 1) = parent
+                orbits(i, 2) = child
+                ! print*, orbits(i, 1), " is orbited by ", orbits(i, 2)
+            end do
 
+            close (2019)
         end subroutine
 end module day6
