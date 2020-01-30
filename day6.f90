@@ -17,6 +17,7 @@ module day6
             character(3), allocatable :: orbits(:,:)
             integer, allocatable      :: list(:,:)
 
+            
             call readf(orbits)
 
             day6all(1) = day6a(orbits, list)
@@ -93,7 +94,7 @@ module day6
             allocate(ger(list(start, 2)), bul(list(ends, 2)))
 
 
-            print*, list(start, :), list(ends, :)
+            ! print*, list(start, :), list(ends, :)
 
             i = 1
             outer: do
@@ -103,7 +104,6 @@ module day6
                 bul(i) = ends
                 do j = 1, i
                     if (ger(j) == bul(i)) then
-                        print*, "Toche"
                         exit outer
                     end if
                 end do
@@ -111,7 +111,7 @@ module day6
             end do outer
 
 
-            print*, list(i, :)
+            ! print*, list(i, :)
 
             day6b = day6b - 2
 
