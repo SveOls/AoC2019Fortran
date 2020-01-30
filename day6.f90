@@ -15,15 +15,16 @@ module day6
 
             integer                   :: day6all(2)
             character(3), allocatable :: orbits(:,:)
+            integer, allocatable      :: list(:,:)
 
             call readf(orbits)
 
-            day6all(1) = day6a(orbits)
-            day6all(2) = day6b()
+            day6all(1) = day6a(orbits, list)
+            day6all(2) = day6b(orbits, list)
 
         end function day6all
 
-        function day6a(orbits)
+        function day6a(orbits, list)
             implicit none
 
             ! type point_orbit
@@ -71,12 +72,50 @@ module day6
 
         end function
 
-        function day6b()
+        function day6b(orbits, list)
             implicit none
 
-            integer day6b
+            integer              :: day6b, list(:,:), start, ends, i,j 
+            character(3)         :: orbits(:, :)
+            integer, allocatable :: ger(:), bul(:)
 
-            day6b = 2
+            day6b = 0
+
+            do i = 1, size(orbits, 1)
+                select case (orbits(i, 2))
+                case ("YOU")
+                    start = i
+                case ("SAN") 
+                    ends = i 
+                end select
+            end do
+
+            allocate(ger(list(start, 2)), bul(list(ends, 2)))
+
+
+            print*, list(start, :), list(ends, :)
+
+            i = 1
+            outer: do
+                start = list(start, 2)
+                ends = list(ends, 2)
+                ger(i) = start
+                bul(i) = ends
+                do j = 1, i
+                    if (ger(j) == bul(i)) then
+                        print*, "Toche"
+                        exit outer
+                    end if
+                end do
+                i = i + 1
+            end do outer
+
+
+            print*, list(i, :)
+
+            day6b = day6b - 2
+
+            ! NEI
         end function day6b
 
         subroutine readf(orbits)
