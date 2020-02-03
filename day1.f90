@@ -4,6 +4,7 @@ module day1
     contains
         subroutine day1timer()
             integer, dimension(2) :: temp
+
             temp = day1all()
         end subroutine day1timer
 
@@ -18,7 +19,9 @@ module day1
 
         function day1a()
             implicit none
-            integer :: reader, sum = 0, day1a
+            integer :: reader, sum, day1a
+
+            sum = 0
             open (unit = 1, file = "input//day1.txt")
 
             do
@@ -40,7 +43,9 @@ module day1
 
         function day1b()
             implicit none
-            integer :: reader, fuel, sum = 0, day1b
+            integer :: reader, fuel, sum, day1b
+
+            sum = 0
             open (unit = 1, file = "input//day1.txt")
 
             do

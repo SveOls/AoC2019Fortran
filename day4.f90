@@ -14,7 +14,11 @@ module day4
             
             integer, dimension(2)              :: day4all
             integer, dimension(:), allocatable :: info
-            integer                            :: a = 123257, b = 647015
+            integer                            :: a, b
+
+            if (allocated(info)) deallocate(info)
+            b = 647015
+            a = 123257
             info = filter(a, b)
 
             day4all(1) = day4a(info)
@@ -63,7 +67,8 @@ module day4
                 if (check) day4b = day4b + 1
 
             end do
-            print*, size(filter)
+            ! print*, size(filter)
+            day4b = size(filter)
 
         end function day4b
 
@@ -74,7 +79,9 @@ module day4
             integer, dimension(5000)           :: tempdata
             integer, dimension(:), allocatable :: filter
 
-            integer :: a, b, coun = 0, num, q, w, e, r, t, y
+            integer :: a, b, coun, num, q, w, e, r, t, y
+
+            coun = 0
             
             num = a
             

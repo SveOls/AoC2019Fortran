@@ -66,9 +66,12 @@ module day3
             character(len=7), allocatable :: inp1(:), inp2(:)
             integer, dimension(1024, 3)   :: tempst
             integer, dimension(2)         :: test, pos
-            integer                       :: i, j, k, l = 1, len1 = 0, len2 = 0
+            integer                       :: i, j, k, l, len1, len2
             logical                       :: c
             
+            l = 1
+            len1 = 0
+            len2 = 0
             allocate(firs(size(inp1),3), sec(size(inp2),3))
 
             pos = (/ 0, 0 /)
@@ -197,8 +200,8 @@ module day3
 
             integer, dimension(:,:), allocatable :: input
 
-            integer :: day3a, i = 1, temp
-
+            integer :: day3a, i, temp
+            i = 1
 
             day3a = abs(input(i, 1)) + abs(input(i, 2))
 
